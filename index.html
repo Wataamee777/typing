@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タイピングゲーム</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #word { font-size: 24px; margin: 20px; }
+        #input { font-size: 18px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>タイピングゲーム</h1>
+    <p id="word"></p>
+    <input type="text" id="input" disabled>
+    <p>正答: <span id="correct">0</span> | ミス: <span id="miss">0</span></p>
+    <button onclick="startGame()">開始</button>
+
+    <script>
+        const words = ["こんにちは", "さようなら", "ありがとう", "ネオンボット", "プログラミング"];
+        let currentWord = "";
+        let correctCount = 0;
+        let missCount = 0;
+
+        function startGame() {
+            correctCount = 0;
+            missCount = 0;
+            document.getElementById("correct").innerText = correctCount;
+            document.getElementById("miss").innerText = missCount;
+            document.getElementById("input").value = "";
+            document.getElementById("input").disabled = false;
+            nextWord();
+        }
+
+        function nextWord() {
+            currentWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById("word").innerText = currentWord;
+            document.getElementById("input").focus();
+        }
+
+        document.getElementById("input").addEventListener("input", (e) => {
+            if (e.target.value === currentWord) {
+                correctCount++;
+                document.getElementById("correct").innerText = correctCount;
+                e.target.value = "";
+                nextWord();
+            } else if (!currentWord.startsWith(e.target.value)) {
+                missCount++;
+                document.getElementById("miss").innerText = missCount;
+                e.target.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
