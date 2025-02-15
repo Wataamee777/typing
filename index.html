@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>タイピングゲーム</title>
+    <script src="https://unpkg.com/wanakana"></script> <!-- ローマ字変換ライブラリ -->
     <style>
         body { font-family: Arial, sans-serif; text-align: center; }
         #word { font-size: 24px; margin: 20px; }
@@ -25,9 +26,9 @@
             "開発", "コンピュータ", "コード", "スクリプト", "スマートフォン",
             "アプリ", "クラウド", "ハッカー", "データ", "アルゴリズム",
             "フレームワーク", "サーバー", "デバッグ", "オープンソース", 
-            "エンジニア","ともだち","インディアン","ユーターン","しょうがいそう",
-            "せんしゅけん","フルーツタルト","すいぼつ","ステップ","おおまちがい",
-            "ちいさい","かいめい"
+            "エンジニア", "ともだち", "インディアン", "ユーターン", "しょうがいそう",
+            "せんしゅけん", "フルーツタルト", "すいぼつ", "ステップ", "おおまちがい",
+            "ちいさい", "かいめい"
         ];
         let currentWord = "";
         let correctCount = 0;
@@ -69,7 +70,10 @@
         }
 
         document.getElementById("input").addEventListener("input", (e) => {
-            if (e.target.value === currentWord) {
+            let inputText = e.target.value.trim();
+            let convertedText = wanakana.toHiragana(inputText); // ローマ字をひらがなに変換
+
+            if (convertedText === currentWord) {
                 correctCount++;
                 streak++;
                 document.getElementById("correct").innerText = correctCount;
@@ -82,7 +86,7 @@
                     document.getElementById("timer").innerText = timeLeft;
                     streak = 0; // ストリークリセット
                 }
-            } else if (!currentWord.startsWith(e.target.value)) {
+            } else if (!currentWord.startsWith(convertedText)) {
                 missCount++;
                 streak = 0; // ミスしたらストリークリセット
                 document.getElementById("miss").innerText = missCount;
