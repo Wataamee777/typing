@@ -12,41 +12,79 @@
 </head>
 <body>
     <h1>タイピングゲーム</h1>
+    <p id="time">残り時間: <span id="timer">60</span> 秒</p>
     <p id="word"></p>
     <input type="text" id="input" disabled>
     <p>正答: <span id="correct">0</span> | ミス: <span id="miss">0</span></p>
     <button onclick="startGame()">開始</button>
 
     <script>
-        const words = ["こんにちは", "さようなら", "ありがとう", "ネオンボット", "プログラミング"];
+        const words = [
+            "こんにちは", "さようなら", "ありがとう", "ネオンボット", "プログラミング",
+            "パソコン", "インターネット", "ウェブサイト", "ゲーム", "タイピング",
+            "開発", "コンピュータ", "コード", "スクリプト", "スマートフォン",
+            "アプリ", "クラウド", "ハッカー", "データ", "アルゴリズム",
+            "フレームワーク", "サーバー", "デバッグ", "オープンソース", 
+            "エンジニア","ともだち","インディアン","ユーターン","しょうがいそう",
+            "せんしゅけん","フルーツタルト","すいぼつ","ステップ","おおまちがい",
+            "ちいさい","かいめい"
+        ];
         let currentWord = "";
         let correctCount = 0;
         let missCount = 0;
+        let streak = 0;
+        let timeLeft = 60;
+        let timer;
 
         function startGame() {
             correctCount = 0;
             missCount = 0;
+            streak = 0;
+            timeLeft = 60;
             document.getElementById("correct").innerText = correctCount;
             document.getElementById("miss").innerText = missCount;
+            document.getElementById("timer").innerText = timeLeft;
             document.getElementById("input").value = "";
             document.getElementById("input").disabled = false;
+            document.getElementById("input").focus();
             nextWord();
+            clearInterval(timer);
+            timer = setInterval(updateTimer, 1000);
         }
 
         function nextWord() {
             currentWord = words[Math.floor(Math.random() * words.length)];
             document.getElementById("word").innerText = currentWord;
-            document.getElementById("input").focus();
+        }
+
+        function updateTimer() {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("timer").innerText = timeLeft;
+            } else {
+                clearInterval(timer);
+                document.getElementById("input").disabled = true;
+                alert("時間切れ！ゲーム終了");
+            }
         }
 
         document.getElementById("input").addEventListener("input", (e) => {
             if (e.target.value === currentWord) {
                 correctCount++;
+                streak++;
                 document.getElementById("correct").innerText = correctCount;
                 e.target.value = "";
                 nextWord();
+
+                // 5回連続正解で1秒追加
+                if (streak >= 5) {
+                    timeLeft++;
+                    document.getElementById("timer").innerText = timeLeft;
+                    streak = 0; // ストリークリセット
+                }
             } else if (!currentWord.startsWith(e.target.value)) {
                 missCount++;
+                streak = 0; // ミスしたらストリークリセット
                 document.getElementById("miss").innerText = missCount;
                 e.target.value = "";
             }
