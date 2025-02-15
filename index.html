@@ -72,8 +72,9 @@
         document.getElementById("input").addEventListener("input", (e) => {
             let inputText = e.target.value.trim();
             let convertedText = wanakana.toHiragana(inputText); // ローマ字をひらがなに変換
+            let romajiText = wanakana.toRomaji(currentWord); // 出題単語をローマ字に変換
 
-            if (convertedText === currentWord) {
+            if (convertedText === currentWord || inputText === romajiText) {
                 correctCount++;
                 streak++;
                 document.getElementById("correct").innerText = correctCount;
@@ -86,7 +87,7 @@
                     document.getElementById("timer").innerText = timeLeft;
                     streak = 0; // ストリークリセット
                 }
-            } else if (!currentWord.startsWith(convertedText)) {
+            } else if (!currentWord.startsWith(convertedText) && !romajiText.startsWith(inputText)) {
                 missCount++;
                 streak = 0; // ミスしたらストリークリセット
                 document.getElementById("miss").innerText = missCount;
