@@ -70,9 +70,9 @@
         }
 
         document.getElementById("input").addEventListener("input", (e) => {
-            let inputText = e.target.value.trim();
-            let convertedText = wanakana.toHiragana(inputText); // ローマ字をひらがなに変換
-            let romajiText = wanakana.toRomaji(currentWord); // 出題単語をローマ字に変換
+            let inputText = e.target.value.trim().toLowerCase(); // 小文字に変換
+            let convertedText = wanakana.toHiragana(inputText); // 入力をひらがなに変換
+            let romajiText = wanakana.toRomaji(currentWord).toLowerCase(); // 出題単語をローマ字に変換
 
             if (convertedText === currentWord || inputText === romajiText) {
                 correctCount++;
